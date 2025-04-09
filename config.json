@@ -1,0 +1,53 @@
+{
+  "workflowApiVersion": "1.1",
+  "metaData": {
+    "icon": "https://git-lucaslsouza.github.io/2-Nitzap-activity/icon.png",
+    "category": "message"
+  },
+  "type": "REST",
+  "lang": {
+    "en-US": {
+      "name": "2-Nitzap Activity",
+      "description": "Sends a WhatsApp message using the Nitzap API"
+    }
+  },
+  "arguments": {
+    "execute": {
+      "inArguments": [],
+      "outArguments": [],
+      "url": "https://git-lucaslsouza.github.io/2-Nitzap-activity/execute",
+      "timeout": 10000,
+      "retryCount": 3,
+      "retryDelay": 1000,
+      "concurrentRequests": 5
+    }
+  },
+  "configurationArguments": {
+    "publish": {
+      "url": "https://git-lucaslsouza.github.io/2-Nitzap-activity/publish"
+    },
+    "validate": {
+      "url": "https://git-lucaslsouza.github.io/2-Nitzap-activity/validate"
+    },
+    "stop": {
+      "url": "https://git-lucaslsouza.github.io/2-Nitzap-activity/stop"
+    }
+  },
+  "userInterfaces": {
+    "configModal": {
+      "url": "https://git-lucaslsouza.github.io/2-Nitzap-activity/config.html",
+      "height": 500,
+      "width": 600
+    }
+  },
+  "schema": {
+    "arguments": {
+      "execute": {
+        "inArguments": [
+          { "messageText": "Text" }
+        ],
+        "outArguments": []
+      }
+    }
+  }
+}
