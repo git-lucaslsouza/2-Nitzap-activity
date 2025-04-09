@@ -23,6 +23,7 @@
     }
   },
   "configurationArguments": {
+    "applicationExtensionKey": "68b12e7b-721b-4fa7-9c6f-741266623b5d",
     "publish": {
       "url": "https://2-nitzap-activity.vercel.app/publish.html"
     },
