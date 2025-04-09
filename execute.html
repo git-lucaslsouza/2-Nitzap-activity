@@ -6,16 +6,16 @@
 </head>
 <body>
   <script>
-    // Simulate handling the "execute" call from Journey Builder
-    console.log('Execute endpoint called');
-    
-    // This is a simulated Nitzap API call (you can replace with real logic later)
-    const logMessage = () => {
-      console.log("Message would be sent to Nitzap API here.");
-    };
+    console.log('🟢 Execute endpoint called.');
 
-    logMessage();
+    // Simulate sending a WhatsApp message
+    const marketingText = 'Your promotional message goes here!';
+    console.log('📤 Sending message to Nitzap API: ', marketingText);
+
+    // Fake API call example
+    // fetch('https://your-nitzap-api.com/send', { method: 'POST', body: JSON.stringify({ message: marketingText }) })
+
   </script>
-  <p>Execute handler loaded. Check console for simulated behavior.</p>
+  <p><strong>Execute Handler:</strong> Simulated sending marketing message to WhatsApp via Nitzap API. Check browser console for logs.</p>
 </body>
 </html>
