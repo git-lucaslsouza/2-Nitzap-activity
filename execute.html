@@ -3,19 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <title>Execute Endpoint</title>
+  <script src="https://assets.sfdc-static.com/marketingcloud/interactive/js/postmonger.js"></script>
 </head>
 <body>
   <script>
-    console.log('🟢 Execute endpoint called.');
+    console.log('🟢 Execute endpoint initialized');
 
-    // Simulate sending a WhatsApp message
-    const marketingText = 'Your promotional message goes here!';
-    console.log('📤 Sending message to Nitzap API: ', marketingText);
+    var connection = new Postmonger.Session();
 
-    // Fake API call example
-    // fetch('https://your-nitzap-api.com/send', { method: 'POST', body: JSON.stringify({ message: marketingText }) })
+    connection.on('request', function(data) {
+      console.log('📥 Request received from Journey Builder:', data);
+    });
 
+    connection.on('initActivity', function(payload) {
+      console.log('🔄 Activity initialized with payload:', payload);
+
+      // Simulate message sending
+      const marketingText = payload.arguments.execute.inArguments[0].messageText || 'Default message';
+      console.log('📤 Sending message to Nitzap API: ', marketingText);
+
+      // Optionally simulate sending via fetch:
+      // fetch('https://your-nitzap-api.com/send', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ message: marketingText })
+      // });
+
+      // Let Journey Builder know the activity executed successfully
+      connection.trigger('updateActivity', payload);
+    });
+
+    // Tell Journey Builder this activity is ready to be initialized
+    connection.trigger('ready');
   </script>
-  <p><strong>Execute Handler:</strong> Simulated sending marketing message to WhatsApp via Nitzap API. Check browser console for logs.</p>
+
+  <p><strong>Execute Handler:</strong> Simulated WhatsApp message. Check browser console for logs.</p>
 </body>
 </html>
