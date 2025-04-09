@@ -2,31 +2,71 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Configure Nitzap</title>
-  <script src="https://unpkg.com/postmonger"></script>
+  <title>Configure Nitzap Activity</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/postmonger/1.0.2/postmonger.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
-  <h2>Send WhatsApp Message</h2>
-  <textarea id="message" rows="6" style="width: 100%;"></textarea>
-  <br>
-  <button id="save">Save</button>
-
+  <h2>Configure WhatsApp Message</h2>
+  <label for="message">Message to Send:</label>
+  <textarea id="message" rows="4" placeholder="Type your message or use %%FirstName%%, etc."></textarea>
+  
   <script>
     const connection = new Postmonger.Session();
-    let payload = {};
+    let messageText = '';
 
-    document.getElementById('save').onclick = function () {
-      const message = document.getElementById('message').value;
-      payload.arguments.execute.inArguments = [{ messageText: message }];
-      payload.metaData.isConfigured = true;
-      connection.trigger('updateActivity', payload);
-    };
+    // Notify Journey Builder we’re ready
+    connection.trigger('ready');
 
-    connection.on('initActivity', data => {
-      if (data) payload = data;
+    // Listen for Journey data (if needed)
+    connection.on('initActivity', function(payload) {
+      if (payload && payload.arguments && payload.arguments.execute && payload.arguments.execute.inArguments) {
+        const args = payload.arguments.execute.inArguments;
+        const existing = args.find(arg => arg.messageText);
+        if (existing) {
+          messageText = existing.messageText;
+          document.getElementById('message').value = messageText;
+        }
+      }
     });
 
-    connection.trigger('ready');
+    // When user clicks Next in Journey Builder
+    connection.on('requestedTokens', function() {}); // Optional: Use tokens if needed
+    connection.on('requestedEndpoints', function() {}); // Optional: Use endpoints if needed
+
+    connection.on('nextStep', function() {
+      const message = document.getElementById('message').value || '';
+      const payload = {
+        arguments: {
+          execute: {
+            inArguments: [
+              { messageText: message }
+            ],
+            outArguments: []
+          }
+        },
+        metaData: {
+          isConfigured: true
+        }
+      };
+      connection.trigger('updateActivity', payload);
+    });
   </script>
 </body>
 </html>
