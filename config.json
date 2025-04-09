@@ -15,7 +15,7 @@
     "execute": {
       "inArguments": [],
       "outArguments": [],
-      "url": "https://git-lucaslsouza.github.io/2-Nitzap-activity/execute",
+      "url": "https://git-lucaslsouza.github.io/2-Nitzap-activity/execute.html",
       "timeout": 10000,
       "retryCount": 3,
       "retryDelay": 1000,
@@ -24,13 +24,13 @@
   },
   "configurationArguments": {
     "publish": {
-      "url": "https://git-lucaslsouza.github.io/2-Nitzap-activity/publish"
+      "url": "https://git-lucaslsouza.github.io/2-Nitzap-activity/publish.html"
     },
     "validate": {
-      "url": "https://git-lucaslsouza.github.io/2-Nitzap-activity/validate"
+      "url": "https://git-lucaslsouza.github.io/2-Nitzap-activity/validate.html"
     },
     "stop": {
-      "url": "https://git-lucaslsouza.github.io/2-Nitzap-activity/stop"
+      "url": "https://git-lucaslsouza.github.io/2-Nitzap-activity/stop.html"
     }
   },
   "userInterfaces": {
