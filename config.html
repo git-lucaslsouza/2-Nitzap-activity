@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Configure Nitzap</title>
+  <script src="https://unpkg.com/postmonger"></script>
+</head>
+<body>
+  <h2>Send WhatsApp Message</h2>
+  <textarea id="message" rows="6" style="width: 100%;"></textarea>
+  <br>
+  <button id="save">Save</button>
+
+  <script>
+    const connection = new Postmonger.Session();
+    let payload = {};
+
+    document.getElementById('save').onclick = function () {
+      const message = document.getElementById('message').value;
+      payload.arguments.execute.inArguments = [{ messageText: message }];
+      payload.metaData.isConfigured = true;
+      connection.trigger('updateActivity', payload);
+    };
+
+    connection.on('initActivity', data => {
+      if (data) payload = data;
+    });
+
+    connection.trigger('ready');
+  </script>
+</body>
+</html>
