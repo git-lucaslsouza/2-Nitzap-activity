@@ -2,72 +2,184 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Configure Nitzap Activity</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/postmonger/1.0.2/postmonger.min.js"></script>
+  <title>WhatsApp Message Configuration</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
+    body { font-family: 'Salesforce Sans', Arial, sans-serif; margin: 20px; }
+    label { display: block; margin-top: 15px; font-weight: bold; }
+    input, select { 
+      width: 100%; 
+      padding: 8px; 
+      margin-top: 5px; 
+      border: 1px solid #dddbda;
+      border-radius: 4px;
     }
-    input, textarea {
-      width: 100%;
-      padding: 8px;
-      margin-top: 10px;
-      margin-bottom: 20px;
-      font-size: 14px;
+    .step { display: none; }
+    .step.active { display: block; }
+    button { 
+      margin-top: 20px;
+      padding: 8px 16px;
+      background-color: #0070d2;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
     }
-    button {
-      padding: 10px 20px;
-      font-size: 14px;
-    }
+    .error { color: #c23934; margin-top: 5px; }
   </style>
 </head>
 <body>
   <h2>Configure WhatsApp Message</h2>
-  <label for="message">Message to Send:</label>
-  <textarea id="message" rows="4" placeholder="Type your message or use %%FirstName%%, etc."></textarea>
-  
+
+  <div id="step1" class="step active">
+    <label for="messageType">Message Type</label>
+    <select id="messageType">
+      <option value="text">Text Only</option>
+      <option value="document">Text + Document</option>
+      <option value="image">Text + Image</option>
+      <option value="video">Text + Video</option>
+    </select>
+    <button onclick="goToStep2()">Next</button>
+  </div>
+
+  <div id="step2" class="step">
+    <label for="numberConnect">WhatsApp Business Number</label>
+    <input type="text" id="numberConnect" placeholder="5514981770936">
+    <div id="numberConnectError" class="error"></div>
+
+    <label for="secret">API Secret Key</label>
+    <input type="password" id="secret" autocomplete="off">
+    <div id="secretError" class="error"></div>
+
+    <label for="destinationField">Destination Phone Number Field</label>
+    <select id="destinationField">
+      <option value="MobilePhone">Mobile Phone</option>
+      <option value="WhatsAppNumber">WhatsApp Number</option>
+    </select>
+
+    <label for="text">Message Template</label>
+    <textarea id="text" rows="3"></textarea>
+    <small>Use {{FirstName}} for personalization</small>
+    <div id="textError" class="error"></div>
+
+    <div id="fileNameGroup" style="display: none;">
+      <label for="fileName">File Name (for documents)</label>
+      <input type="text" id="fileName" placeholder="document.pdf">
+    </div>
+
+    <div id="mediaFields" style="display: none;">
+      <label for="mediaUrl">Media URL</label>
+      <input type="text" id="mediaUrl" placeholder="https://example.com/image.jpg">
+      <small>Must be publicly accessible URL</small>
+    </div>
+
+    <button onclick="goToStep1()">Back</button>
+    <button onclick="validateAndSave()">Save Configuration</button>
+  </div>
+
+  <script src="https://unpkg.com/postmonger"></script>
   <script>
     const connection = new Postmonger.Session();
-    let messageText = '';
+    let payload = {};
+    let token = '';
 
-    // Notify Journey Builder we’re ready
+    // Initialize activity
+    connection.on('initActivity', initialize);
+    connection.on('clickedNext', save);
     connection.trigger('ready');
 
-    // Listen for Journey data (if needed)
-    connection.on('initActivity', function(payload) {
-      if (payload && payload.arguments && payload.arguments.execute && payload.arguments.execute.inArguments) {
-        const args = payload.arguments.execute.inArguments;
-        const existing = args.find(arg => arg.messageText);
-        if (existing) {
-          messageText = existing.messageText;
-          document.getElementById('message').value = messageText;
+    function initialize(data) {
+      if (data) {
+        payload = data;
+        const config = data.arguments?.execute?.inArguments?.[0] || {};
+        
+        // Restore saved configuration
+        document.getElementById('messageType').value = config.messageType || 'text';
+        document.getElementById('numberConnect').value = config.numberConnect || '';
+        document.getElementById('secret').value = config.secret || '';
+        document.getElementById('destinationField').value = config.destinationField || 'MobilePhone';
+        document.getElementById('text').value = config.text || '';
+        
+        if (config.messageType && config.messageType !== 'text') {
+          document.getElementById('mediaUrl').value = config.mediaUrl || '';
+          if (config.messageType === 'document') {
+            document.getElementById('fileName').value = config.fileName || '';
+          }
         }
       }
-    });
+    }
 
-    // When user clicks Next in Journey Builder
-    connection.on('requestedTokens', function() {}); // Optional: Use tokens if needed
-    connection.on('requestedEndpoints', function() {}); // Optional: Use endpoints if needed
+    function goToStep2() {
+      document.getElementById('step1').classList.remove('active');
+      document.getElementById('step2').classList.add('active');
+      toggleMediaFields();
+    }
 
-    connection.on('nextStep', function() {
-      const message = document.getElementById('message').value || '';
-      const payload = {
-        arguments: {
-          execute: {
-            inArguments: [
-              { messageText: message }
-            ],
-            outArguments: []
-          }
-        },
-        metaData: {
-          isConfigured: true
-        }
+    function goToStep1() {
+      document.getElementById('step2').classList.remove('active');
+      document.getElementById('step1').classList.add('active');
+    }
+
+    function toggleMediaFields() {
+      const type = document.getElementById('messageType').value;
+      document.getElementById('mediaFields').style.display = type === 'text' ? 'none' : 'block';
+      document.getElementById('fileNameGroup').style.display = type === 'document' ? 'block' : 'none';
+    }
+
+    function validateAndSave() {
+      // Clear previous errors
+      document.querySelectorAll('.error').forEach(el => el.textContent = '');
+      
+      let isValid = true;
+      
+      // Validate required fields
+      if (!document.getElementById('numberConnect').value.trim()) {
+        document.getElementById('numberConnectError').textContent = 'WhatsApp Business Number is required';
+        isValid = false;
+      }
+      
+      if (!document.getElementById('secret').value.trim()) {
+        document.getElementById('secretError').textContent = 'API Secret is required';
+        isValid = false;
+      }
+      
+      if (!document.getElementById('text').value.trim()) {
+        document.getElementById('textError').textContent = 'Message text is required';
+        isValid = false;
+      }
+      
+      if (isValid) {
+        save();
+      }
+    }
+
+    function save() {
+      const messageType = document.getElementById('messageType').value;
+      const config = {
+        numberConnect: document.getElementById('numberConnect').value.trim(),
+        secret: document.getElementById('secret').value.trim(),
+        destinationField: document.getElementById('destinationField').value,
+        text: document.getElementById('text').value.trim(),
+        messageType: messageType
       };
+
+      if (messageType !== 'text') {
+        config.mediaUrl = document.getElementById('mediaUrl').value.trim();
+        if (messageType === 'document') {
+          config.fileName = document.getElementById('fileName').value.trim();
+        }
+        if (messageType === 'video') {
+          config.mimetype = 'video/mp4';
+        }
+      }
+
+      payload.arguments = payload.arguments || {};
+      payload.arguments.execute = payload.arguments.execute || {};
+      payload.arguments.execute.inArguments = [config];
+      payload.metaData = payload.metaData || {};
+      payload.metaData.isConfigured = true;
+
       connection.trigger('updateActivity', payload);
-    });
+    }
   </script>
-  <script src="./config.js"></script>
 </body>
 </html>
