@@ -1,4 +1,4 @@
-window.customActivityConfig = {
+{
   "workflowApiVersion": "1.1",
   "metaData": {
     "icon": "https://git-lucaslsouza.github.io/2-Nitzap-activity/nitzap_icon.png",
@@ -55,4 +55,4 @@ window.customActivityConfig = {
       }
     }
   }
-};
+}
