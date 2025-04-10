@@ -7,20 +7,20 @@
   "type": "REST",
   "lang": {
     "en-US": {
-      "name": "Minha Atividade",
-      "description": "Descrição da atividade"
+      "name": "WhatsApp via Nitzap",
+      "description": "Send a WhatsApp message through the Nitzap API"
     }
   },
   "configurationArguments": {
     "applicationExtensionKey": "68b12e7b-721b-4fa7-9c6f-741266623b5d",
     "publish": {
-      "url": "https://2-nitzap-activity.vercel.app/mc-public/publish.html"
+      "url": "https://2-nitzap-activity.vercel.app/api/publish"
     },
     "validate": {
-      "url": "https://2-nitzap-activity.vercel.app/mc-public/validate.html"
+      "url": "https://2-nitzap-activity.vercel.app/api/validate"
     },
     "stop": {
-      "url": "https://2-nitzap-activity.vercel.app/mc-public/stop.html"
+      "url": "https://2-nitzap-activity.vercel.app/api/stop"
     }
   },
   "userInterfaces": {
@@ -28,7 +28,7 @@
       "url": "https://2-nitzap-activity.vercel.app/mc-public/config.html"
     },
     "runningModal": {
-      "url": "https://2-nitzap-activity.vercel.app/mc-public/execute.html"
+      "url": "https://2-nitzap-activity.vercel.app/mc-public/config.html"
     }
   },
   "schema": {
