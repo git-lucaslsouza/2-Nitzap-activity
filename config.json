@@ -15,7 +15,7 @@
     "execute": {
       "inArguments": [],
       "outArguments": [],
-      "url": "https://2-nitzap-activity.vercel.app/execute.html",
+      "url": "https://2-nitzap-activity.vercel.app/api/execute",
       "timeout": 10000,
       "retryCount": 3,
       "retryDelay": 1000,
