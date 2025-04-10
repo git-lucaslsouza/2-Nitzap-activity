@@ -1,0 +1,25 @@
+{
+  "name": "2-nitzap-activity",
+  "version": "1.0.0",
+  "description": "Custom Activity for Salesforce Marketing Cloud that captures a marketing message and sends it to the Nitzap API for WhatsApp delivery. Supports manual text input or AMPscript variables for dynamic message content.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/git-lucaslsouza/2-Nitzap-activity.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/git-lucaslsouza/2-Nitzap-activity/issues"
+  },
+  "homepage": "https://github.com/git-lucaslsouza/2-Nitzap-activity#readme",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0"
+  }
+}
