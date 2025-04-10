@@ -1,6 +1,5 @@
 {
-  "version": 1,
-  "public": "mc-public",
+  "version": 2,
   "rewrites": [
     {
       "source": "/execute",
