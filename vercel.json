@@ -2,10 +2,6 @@
   "version": 2,
   "rewrites": [
     {
-      "source": "/execute",
-      "destination": "/mc-public/execute.html"
-    },
-    {
       "source": "/config",
       "destination": "/mc-public/config.html"
     }
