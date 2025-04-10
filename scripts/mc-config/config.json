@@ -1,0 +1,61 @@
+{
+  "workflowApiVersion": "1.1",
+  "metaData": {
+    "icon": "https://2-nitzap-activity.vercel.app/mc-public/assets/nitzap_icon.png",
+    "category": "message"
+  },
+  "type": "REST",
+  "lang": {
+    "en-US": {
+      "name": "Minha Atividade",
+      "description": "Descrição da atividade"
+    }
+  },
+  "arguments": {
+    "execute": {
+      "url": "https://2-nitzap-activity.vercel.app/api/execute",
+      "timeout": 10000,
+      "retryCount": 3,
+      "retryDelay": 1000,
+      "concurrentRequests": 5
+    }
+  },
+  "configurationArguments": {
+    "applicationExtensionKey": "SEU-EXTENSION-KEY",
+    "publish": {
+      "url": "https://2-nitzap-activity.vercel.app/mc-public/publish.html"
+    },
+    "validate": {
+      "url": "https://2-nitzap-activity.vercel.app/mc-public/validate.html"
+    },
+    "stop": {
+      "url": "https://2-nitzap-activity.vercel.app/mc-public/stop.html"
+    }
+  },
+  "userInterfaces": {
+    "configModal": {
+      "url": "https://2-nitzap-activity.vercel.app/mc-public/config.html"
+    },
+    "runningModal": {
+      "url": "https://2-nitzap-activity.vercel.app/mc-public/execute.html"
+    }
+  },
+  "schema": {
+    "arguments": {
+      "execute": {
+        "inArguments": [
+          {
+            "contactKey": "{{Contact.Key}}"
+          }
+        ],
+        "outArguments": [],
+        "url": "https://2-nitzap-activity.vercel.app/api/execute",
+        "verb": "POST",
+        "body": "",
+        "header": "",
+        "format": "json",
+        "useJwt": false
+      }
+    }
+  }
+}

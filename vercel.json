@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "public": "mc-public",
+  "rewrites": [
+    {
+      "source": "/execute",
+      "destination": "/mc-public/execute.html"
+    },
+    {
+      "source": "/config",
+      "destination": "/mc-public/config.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "https://mc.exacttarget.com" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET,POST,OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Authorization" }
+      ]
+    },
+    {
+      "source": "/(.*).html",
+      "headers": [
+        { "key": "Content-Type", "value": "text/html" },
+        { "key": "X-Frame-Options", "value": "ALLOW-FROM https://mc.exacttarget.com" }
+      ]
+    }
+  ]
+}
