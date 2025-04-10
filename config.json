@@ -50,9 +50,17 @@
     "arguments": {
       "execute": {
         "inArguments": [
-          { "messageText": "Text" }
+          {
+            "contactKey": "{{Contact.Key}}"
+          }
         ],
-        "outArguments": []
+        "outArguments": [],
+        "url": "https://2-nitzap-activity.vercel.app/api/execute",
+        "verb": "POST",
+        "body": "",
+        "header": "",
+        "format": "json",
+        "useJwt": false
       }
     }
   }
