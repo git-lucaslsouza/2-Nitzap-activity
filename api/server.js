@@ -1,21 +1,11 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const path = require('path');
-const app = express();
-const PORT = process.env.PORT || 3000;
+export default async function handler(req, res) {
+  if (req.method === 'POST') {
+    const body = req.body;
+    console.log('Received data:', body);
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// Serve todos os arquivos da pasta atual (HTML, imagens, etc)
-app.use(express.static(path.join(__dirname)));
-
-// Endpoint que o Marketing Cloud chama quando executa sua activity
-app.post('/execute', (req, res) => {
-  console.log('Executando com os dados:', req.body);
-  res.status(200).send({ message: 'Executado com sucesso!' });
-});
-
-app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
-});
+    // Aqui você pode processar os inArguments do SFMC
+    res.status(200).json({ message: 'Custom activity executed with success', received: body });
+  } else {
+    res.status(405).json({ error: 'Method not allowed' });
+  }
+}
