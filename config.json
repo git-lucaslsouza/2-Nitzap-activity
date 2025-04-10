@@ -26,9 +26,6 @@
   "userInterfaces": {
     "configModal": {
       "url": "https://2-nitzap-activity.vercel.app/mc-public/config.html"
-    },
-    "runningModal": {
-      "url": "https://2-nitzap-activity.vercel.app/mc-public/config.html"
     }
   },
   "arguments": {
@@ -50,11 +47,7 @@
   "schema": {
     "arguments": {
       "execute": {
-        "inArguments": [
-          {
-            "contactKey": "{{Contact.Key}}"
-          }
-        ],
+        "inArguments": [],
         "outArguments": []
       }
     }
