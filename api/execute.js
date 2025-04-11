@@ -71,8 +71,8 @@ export default async function handler(req, res) {
       text.replace(/\{\{(\w+)\}\}/g, (_, field) => 
         contactData[field] || config[field] || '');
 
-    const destination = contactData[config.destinationField] || config.destination;
-    if (!destination) throw new Error(`No destination phone number found in field: ${config.destinationField}`);
+    const destination = config.destinationField || config.destination;
+    if (!destination) throw new Error("No destination phone number provided.");
 
     const message = {
       to: destination,
