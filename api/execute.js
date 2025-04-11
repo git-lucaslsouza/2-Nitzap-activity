@@ -3,7 +3,24 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const activity = req.body;
+  let activity;
+
+  try {
+    // 🛠 Parse raw body if Vercel doesn't auto-parse
+    if (typeof req.body === 'string') {
+      activity = JSON.parse(req.body);
+    } else {
+      activity = req.body;
+    }
+  } catch (err) {
+    return res.status(400).json({ error: 'Invalid JSON in request body' });
+  }
+
+  console.log('📦 Full activity body:', JSON.stringify(activity, null, 2));
+
+  // Support both payload formats
+  const config = activity?.inArguments?.[0] || activity?.arguments?.execute?.inArguments?.[0] || {};
+  const contactData = activity?.contactData || {};
 
   const tokenCache = {
     value: null,
@@ -67,13 +84,12 @@ export default async function handler(req, res) {
   };
 
   const sendWhatsAppMessage = async (config, contactData) => {
-    console.log("Received inArguments:", JSON.stringify(req.body?.inArguments, null, 2));
-    
-    const parseTemplate = (text) => 
-      text.replace(/\{\{(\w+)\}\}/g, (_, field) => 
-        contactData[field] || config[field] || '');
+    const parseTemplate = (text) =>
+      text.replace(/\{\{(\w+)\}\}/g, (_, field) =>
+        contactData[field] || config[field] || ''
+      );
 
-    const destination = config.destinationField || config.destination;
+    const destination = config.destination || config.destinationField;
     if (!destination) throw new Error("No destination phone number provided.");
 
     const message = {
@@ -119,15 +135,12 @@ export default async function handler(req, res) {
   };
 
   try {
-    const config = activity.arguments?.execute?.inArguments?.[0] || {};
-    const contactData = activity.contactData || {};
-
     if (!config.numberConnect || !config.secret) {
       throw new Error('Configuration incomplete - missing credentials');
     }
 
     const result = await sendWhatsAppMessage(config, contactData);
-    console.log(`Message sent to ${result.to} successfully`);
+    console.log(`✅ Message sent to ${result.to} successfully`);
 
     return res.status(200).json({
       status: 'success',
@@ -135,7 +148,7 @@ export default async function handler(req, res) {
       response: result
     });
   } catch (error) {
-    console.error('Error in custom activity:', error);
+    console.error('❌ Error in custom activity:', error);
     return res.status(500).json({
       status: 'error',
       message: error.message,
