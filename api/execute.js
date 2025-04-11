@@ -67,6 +67,8 @@ export default async function handler(req, res) {
   };
 
   const sendWhatsAppMessage = async (config, contactData) => {
+    console.log("Received inArguments:", JSON.stringify(req.body?.inArguments, null, 2));
+    
     const parseTemplate = (text) => 
       text.replace(/\{\{(\w+)\}\}/g, (_, field) => 
         contactData[field] || config[field] || '');

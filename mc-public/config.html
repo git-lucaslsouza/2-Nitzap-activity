@@ -52,6 +52,7 @@
 
     <label for="destinationField">Phone Field (e.g., numberConnect):</label>
     <input type="text" id="destinationField" placeholder="Enter field name for user phone number">
+    <div id="destinationFieldError" class="error"></div>
 
     <label for="text">Message Template</label>
     <textarea id="text" rows="3"></textarea>
@@ -133,6 +134,11 @@
         document.getElementById('numberConnectError').textContent = 'WhatsApp Business Number is required';
         isValid = false;
       }
+
+      if (!document.getElementById('destinationField').value.trim()) {
+        document.getElementById('destinationFieldError').textContent = 'Destination Number is required';
+        isValid = false;
+      }
       
       if (!document.getElementById('secret').value.trim()) {
         document.getElementById('secretError').textContent = 'API Secret is required';
@@ -152,9 +158,10 @@
     function save() {
       const messageType = document.getElementById('messageType').value;
       const config = {
+        contactKey: '{{Contact.Key}}', // still useful to track in logs
+        destination: document.getElementById('destinationField').value.trim(),
         numberConnect: document.getElementById('numberConnect').value.trim(),
         secret: document.getElementById('secret').value.trim(),
-        destinationField: document.getElementById('destinationField').value,
         text: document.getElementById('text').value.trim(),
         messageType: messageType
       };
