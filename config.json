@@ -1,7 +1,7 @@
 {
   "workflowApiVersion": "1.1",
   "metaData": {
-    "icon": "https://2-nitzap-activity.vercel.app/mc-public/assets/nitzap_icon.png",
+    "icon": "https://2-nitzap-activity.vercel.app/mc-public/assets/nitzap.jpg",
     "category": "message"
   },
   "type": "REST",
